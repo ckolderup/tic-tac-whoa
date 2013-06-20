@@ -12,7 +12,7 @@ class TileCompleteException extends Exception
 class Tile extends Board[Option[Player]] {
   protected val spots = mkArray
 
-  def occupies(player: Player, loc: Loc) = spots(loc.x)(loc.y) == Some(player)
+  def occupant(loc: Loc) = spots(loc.x)(loc.y)
 
   def place(turn: Turn) {
     if (hasWinner) throw new TileCompleteException

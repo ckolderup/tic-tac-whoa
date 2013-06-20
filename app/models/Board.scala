@@ -1,7 +1,6 @@
 package models
 
 import scala.collection.mutable
-import scala.reflect.ClassTag
 
 /**
  * TODO: Document me
@@ -46,8 +45,8 @@ trait Board[T] {
   def hasWinner: Boolean = getWinner.isDefined
   def lastTurn: Turn = turns.last
 
-  def occupies(player: Player, loc: Loc): Boolean
-  def owns(player: Player, lines: Lines): Boolean = lines.forall(l => occupies(player, l))
+  def occupant(loc: Loc): Option[Player]
+  def owns(player: Player, lines: Lines): Boolean = lines.forall(l => occupant(l) == Some(player))
 
   def getWinner: Option[Player] =
     getLines(lastTurn.loc).exists(line => owns(lastTurn.player, line)) match {

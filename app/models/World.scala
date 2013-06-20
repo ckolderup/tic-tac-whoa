@@ -10,10 +10,10 @@ package models
 class World extends Board[Tile] {
   protected val spots = mkArray
 
-  def occupies(player: Player, loc: Loc) = spots(loc.x)(loc.y).getWinner == Some(player)
+  def occupant(loc: Loc) = spots(loc.x)(loc.y).getWinner
 
   def place(turn: Turn, loc: Loc) {
-    if (lastTurn.loc != loc) throw new InvalidPlacementException
+    if (lastTurn.loc != loc && !spots(lastTurn.loc.x)(lastTurn.loc.y).hasWinner) throw new InvalidPlacementException
 
     spots(loc.x)(loc.y).place(turn)
   }
