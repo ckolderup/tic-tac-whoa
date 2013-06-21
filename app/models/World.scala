@@ -12,9 +12,10 @@ class World extends Board[Tile] {
 
   def occupant(loc: Loc) = spots(loc.x)(loc.y).getWinner
 
-  def place(turn: Turn, loc: Loc) {
-    if (lastTurn.loc != loc && !spots(lastTurn.loc.x)(lastTurn.loc.y).hasWinner) throw new InvalidPlacementException
+  def place(turn: Turn, tile: Loc) {
+    if (lastTurn.loc != tile && !spots(lastTurn.loc.x)(lastTurn.loc.y).hasWinner) throw new InvalidPlacementException
 
-    spots(loc.x)(loc.y).place(turn)
+    spots(tile.x)(tile.y).place(turn)
+    turns += Turn(turn.player, tile)
   }
 }
