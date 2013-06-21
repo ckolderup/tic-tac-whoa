@@ -13,29 +13,27 @@ class InvalidPlacementException extends Exception
 object Board {
   type Lines = Seq[Loc]
 
-  val TOP_ROW           : Lines = Seq(Loc(0, 0), Loc(0, 1), Loc(0, 2))
-  val MIDDLE_ROW        : Lines = Seq(Loc(1, 0), Loc(1, 1), Loc(1, 2))
-  val BOTTOM_ROW        : Lines = Seq(Loc(2, 0), Loc(2, 1), Loc(2, 2))
+  val TOP_ROW           : Lines = Seq(Loc.TOP_LEFT,    Loc.TOP_MIDDLE,    Loc.TOP_RIGHT)
+  val MIDDLE_ROW        : Lines = Seq(Loc.MIDDLE_LEFT, Loc.MIDDLE,        Loc.MIDDLE_RIGHT)
+  val BOTTOM_ROW        : Lines = Seq(Loc.BOTTOM_LEFT, Loc.BOTTOM_MIDDLE, Loc.BOTTOM_RIGHT)
 
-  val LEFT_COLUMN       : Lines = Seq(Loc(0, 0), Loc(1, 0), Loc(2, 0))
-  val MIDDLE_COLUMN     : Lines = Seq(Loc(0, 1), Loc(1, 1), Loc(2, 1))
-  val RIGHT_COLUMN      : Lines = Seq(Loc(0, 2), Loc(1, 2), Loc(2, 2))
+  val LEFT_COLUMN       : Lines = Seq(Loc.TOP_LEFT,    Loc.MIDDLE_LEFT,   Loc.BOTTOM_LEFT)
+  val MIDDLE_COLUMN     : Lines = Seq(Loc.TOP_MIDDLE,  Loc.MIDDLE,        Loc.BOTTOM_MIDDLE)
+  val RIGHT_COLUMN      : Lines = Seq(Loc.TOP_RIGHT,   Loc.MIDDLE_RIGHT,  Loc.BOTTOM_RIGHT)
 
-  val SLASH_DIAGONAL    : Lines = Seq(Loc(0, 2), Loc(1, 1), Loc(2, 0))
-  val BACKSLASH_DIAGONAL: Lines = Seq(Loc(0, 0), Loc(1, 1), Loc(2, 2))
+  val SLASH_DIAGONAL    : Lines = Seq(Loc.BOTTOM_LEFT, Loc.MIDDLE,        Loc.TOP_RIGHT)
+  val BACKSLASH_DIAGONAL: Lines = Seq(Loc.TOP_LEFT,    Loc.MIDDLE,        Loc.BOTTOM_RIGHT)
 
-  protected def getLines(loc: Loc): Seq[Lines] = {
-    loc match {
-      case Loc(0, 0) => Seq(TOP_ROW, LEFT_COLUMN, BACKSLASH_DIAGONAL)
-      case Loc(0, 1) => Seq(TOP_ROW, MIDDLE_COLUMN)
-      case Loc(0, 2) => Seq(TOP_ROW, RIGHT_COLUMN, SLASH_DIAGONAL)
-      case Loc(1, 0) => Seq(MIDDLE_ROW, LEFT_COLUMN)
-      case Loc(1, 1) => Seq(MIDDLE_ROW, MIDDLE_COLUMN, SLASH_DIAGONAL, BACKSLASH_DIAGONAL)
-      case Loc(1, 2) => Seq(MIDDLE_ROW, RIGHT_COLUMN)
-      case Loc(2, 0) => Seq(BOTTOM_ROW, LEFT_COLUMN, SLASH_DIAGONAL)
-      case Loc(2, 1) => Seq(BOTTOM_ROW, MIDDLE_COLUMN)
-      case Loc(2, 2) => Seq(BOTTOM_ROW, RIGHT_COLUMN, BACKSLASH_DIAGONAL)
-    }
+  protected def getLines(loc: Loc): Seq[Lines] = loc match {
+    case Loc.TOP_LEFT      => Seq(TOP_ROW, LEFT_COLUMN, BACKSLASH_DIAGONAL)
+    case Loc.TOP_MIDDLE    => Seq(TOP_ROW, MIDDLE_COLUMN)
+    case Loc.TOP_RIGHT     => Seq(TOP_ROW, RIGHT_COLUMN, SLASH_DIAGONAL)
+    case Loc.MIDDLE_LEFT   => Seq(MIDDLE_ROW, LEFT_COLUMN)
+    case Loc.MIDDLE        => Seq(MIDDLE_ROW, MIDDLE_COLUMN, SLASH_DIAGONAL, BACKSLASH_DIAGONAL)
+    case Loc.MIDDLE_RIGHT  => Seq(MIDDLE_ROW, RIGHT_COLUMN)
+    case Loc.BOTTOM_LEFT   => Seq(BOTTOM_ROW, LEFT_COLUMN, SLASH_DIAGONAL)
+    case Loc.BOTTOM_MIDDLE => Seq(BOTTOM_ROW, MIDDLE_COLUMN)
+    case Loc.BOTTOM_RIGHT  => Seq(BOTTOM_ROW, RIGHT_COLUMN, BACKSLASH_DIAGONAL)
   }
 }
 
@@ -48,11 +46,12 @@ trait Board[T] {
   def occupant(loc: Loc): Option[Player]
   def owns(player: Player, lines: Lines): Boolean = lines.forall(l => occupant(l) == Some(player))
 
-  def getWinner: Option[Player] =
+  def getWinner: Option[Player] = {
     getLines(lastTurn.loc).exists(line => owns(lastTurn.player, line)) match {
       case true => Some(lastTurn.player)
       case false => None
     }
+  }
 
   protected def mkArray(implicit m: Manifest[T]): Array[Array[T]] = Array.ofDim[T](3, 3)
   protected val spots: Array[Array[T]]
