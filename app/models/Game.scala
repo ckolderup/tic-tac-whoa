@@ -33,6 +33,7 @@ class Game(playerLabels: (String, String)) {
     }
 
    def play(turn: Turn, tile: Loc) {
+     //TODO: handle a player trying to play twice in a row
      board.place(turn, tile)
    }
 

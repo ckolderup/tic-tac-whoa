@@ -37,6 +37,7 @@ object Application extends Controller {
             case _ => throw new InvalidRequestException("no such player " + playerName)
           }
 
+          //TODO: handle exceptions thrown by game
           game.play(Turn(player, Loc(boardX, boardY)), Loc(worldX, worldY))
           Ok(
             Json.obj(
