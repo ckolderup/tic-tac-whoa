@@ -8,6 +8,7 @@ import java.util.UUID
  * @author ckolderup
  * @since 6/20/13 9:57 AM
  */
+
 class Game(playerLabels: (String, String)) {
     val uuid: UUID = UUID.randomUUID
     val board: World = new World
@@ -23,11 +24,13 @@ class Game(playerLabels: (String, String)) {
     def requiredTile: Option[Loc] = {
       board.occupant(board.lastTurn.loc) match {
         case None => Some(board.lastTurn.loc)
-        case Some(Player) => None
+        case Some(_: Player) => None
       }
     }
 
    def play(turn: Turn, tile: Loc) {
      board.place(turn, tile)
    }
+
+  def winner: Option[Player] = board.getWinner
 }
