@@ -10,7 +10,11 @@ package models
 class TileCompleteException extends Exception
 
 class Tile extends Board[Option[Player]] {
-  protected val spots = mkArray
+  protected val spots = {
+    val board = Array.ofDim[Option[Player]](3, 3)
+    for (i <- 0 until 3; j <- 0 until 3) board(i)(j) = None
+    board
+  }
 
   def occupant(loc: Loc) = spots(loc.x)(loc.y)
 

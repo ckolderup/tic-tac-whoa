@@ -42,19 +42,20 @@ trait Board[T] {
   import Board._
 
   def hasWinner: Boolean = getWinner.isDefined
-  def lastTurn: Turn = turns.last
+  def lastTurn: Option[Turn] = if (turns.isEmpty) None else Some(turns.last)
 
   def occupant(loc: Loc): Option[Player]
   def owns(player: Player, lines: Lines): Boolean = lines.forall(l => occupant(l) == Some(player))
 
   def getWinner: Option[Player] = {
-    getLines(lastTurn.loc).exists(line => owns(lastTurn.player, line)) match {
-      case true => Some(lastTurn.player)
-      case false => None
-    }
+    lastTurn.flatMap(turn =>
+      getLines(turn.loc).exists(line => owns(turn.player, line)) match {
+        case true => Some(turn.player)
+        case false => None
+      }
+    )
   }
 
-  protected def mkArray(implicit m: Manifest[T]): Array[Array[T]] = Array.ofDim[T](3, 3)
   protected val spots: Array[Array[T]]
   protected val turns: mutable.MutableList[Turn] = new mutable.MutableList()
 }

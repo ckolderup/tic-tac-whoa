@@ -14,18 +14,22 @@ class Game(playerLabels: (String, String)) {
     val board: World = new World
     val players = (Player(playerLabels._1, "X"), Player(playerLabels._2, "O"))
 
-    def currentPlayer = {
-      board.lastTurn.player match {
-        case players._1 => players._2
-        case players._2 => players._1
+    def currentPlayer: Player = {
+      board.lastTurn.map(_.player) match {
+        case Some(players._1) => players._2
+        case Some(players._2) => players._1
+        case None => players._1
       }
     }
 
     def requiredTile: Option[Loc] = {
-      board.occupant(board.lastTurn.loc) match {
-        case None => Some(board.lastTurn.loc)
-        case Some(_: Player) => None
-      }
+      board.lastTurn.flatMap(turn =>
+        board.occupant(turn.loc) match {
+          case None => Some(turn.loc)
+          case Some(_: Player) => None
+
+        }
+      )
     }
 
    def play(turn: Turn, tile: Loc) {

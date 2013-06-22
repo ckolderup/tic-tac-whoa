@@ -8,12 +8,18 @@ package models
  */
 
 class World extends Board[Tile] {
-  protected val spots = mkArray
+  protected val spots = {
+    val board = Array.ofDim[Tile](3, 3)
+    for (i <- 0 until 3; j <- 0 until 3) board(i)(j) = new Tile
+    board
+  }
 
   def occupant(loc: Loc) = spots(loc.x)(loc.y).getWinner
 
   def place(turn: Turn, tile: Loc) {
-    if (lastTurn.loc != tile && !spots(lastTurn.loc.x)(lastTurn.loc.y).hasWinner) throw new InvalidPlacementException
+    lastTurn.map(turn =>
+      if (turn.loc != tile && !spots(turn.loc.x)(turn.loc.y).hasWinner) throw new InvalidPlacementException
+    )
 
     spots(tile.x)(tile.y).place(turn)
     turns += Turn(turn.player, tile)
