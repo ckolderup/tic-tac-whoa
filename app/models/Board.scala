@@ -14,6 +14,7 @@ class InvalidPlacementException extends Exception
 object Board {
   type Lines = Seq[Loc]
 
+  //TODO: could probably make a map
   val TOP_ROW           : Lines = Seq(Loc.TOP_LEFT,    Loc.TOP_MIDDLE,    Loc.TOP_RIGHT)
   val MIDDLE_ROW        : Lines = Seq(Loc.MIDDLE_LEFT, Loc.MIDDLE,        Loc.MIDDLE_RIGHT)
   val BOTTOM_ROW        : Lines = Seq(Loc.BOTTOM_LEFT, Loc.BOTTOM_MIDDLE, Loc.BOTTOM_RIGHT)
@@ -25,6 +26,7 @@ object Board {
   val SLASH_DIAGONAL    : Lines = Seq(Loc.BOTTOM_LEFT, Loc.MIDDLE,        Loc.TOP_RIGHT)
   val BACKSLASH_DIAGONAL: Lines = Seq(Loc.TOP_LEFT,    Loc.MIDDLE,        Loc.BOTTOM_RIGHT)
 
+  //TODO: this should just be a map
   protected def getLines(loc: Loc): Seq[Lines] = loc match {
     case Loc.TOP_LEFT      => Seq(TOP_ROW, LEFT_COLUMN, BACKSLASH_DIAGONAL)
     case Loc.TOP_MIDDLE    => Seq(TOP_ROW, MIDDLE_COLUMN)
@@ -57,5 +59,7 @@ trait Board[T] {
   }
 
   protected val spots: Array[Array[T]]
+
+  //TODO: Turns should be on Game, not on the Board
   protected val turns: mutable.MutableList[Turn] = new mutable.MutableList()
 }

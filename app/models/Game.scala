@@ -14,6 +14,7 @@ class Game(playerLabels: (String, String)) {
     val board: World = new World
     val players = (Player(playerLabels._1, "X"), Player(playerLabels._2, "O"))
 
+  //TODO: could probably do something sneak with Either.swap
     def currentPlayer: Player = {
       board.lastTurn.map(_.player) match {
         case Some(players._1) => players._2

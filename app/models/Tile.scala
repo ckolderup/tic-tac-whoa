@@ -9,13 +9,16 @@ package models
 
 class TileCompleteException extends Exception
 
+//TODO: make it a board of some class that encapsulates Option[Player] so that more code can be shared between World and Tile via a mixin trait
 class Tile extends Board[Option[Player]] {
+  //TODO: abstractable? or does the ofDim stop that still?
   protected val spots = {
     val board = Array.ofDim[Option[Player]](3, 3)
     for (i <- 0 until 3; j <- 0 until 3) board(i)(j) = None
     board
   }
 
+  //TODO: should be abstractable to match World.occupant
   def occupant(loc: Loc) = spots(loc.x)(loc.y)
 
   def place(turn: Turn) {

@@ -22,6 +22,7 @@ class World extends Board[Tile] {
     )
 
     spots(tile.x)(tile.y).place(turn)
+    //TODO: don't do this one? already adding it in the Tile.place
     turns += Turn(turn.player, tile)
   }
 }
