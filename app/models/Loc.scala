@@ -16,6 +16,13 @@ object Loc {
   val BOTTOM_LEFT: Loc = Loc(2, 0)
   val BOTTOM_MIDDLE: Loc = Loc(2, 1)
   val BOTTOM_RIGHT: Loc = Loc(2, 2)
+
+  def all = Set(TOP_LEFT, TOP_MIDDLE, TOP_RIGHT,
+                MIDDLE_LEFT, MIDDLE, MIDDLE_RIGHT,
+                BOTTOM_LEFT, BOTTOM_MIDDLE, BOTTOM_RIGHT)
+
 }
 
-case class Loc(x: Int, y: Int)
+case class Loc(x: Int, y: Int) {
+  def lines = Line.has(this)
+}
