@@ -1,7 +1,7 @@
 package models
 
 /**
- * TODO: Document me
+ * Represents the individual, playable ("inner") boards
  *
  * @author ckolderup
  * @since 6/20/13 11:53 AM

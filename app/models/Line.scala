@@ -1,6 +1,10 @@
 package models
 
 /**
+ * A "line" is a row, column, or diagonal.
+ * Used to determine if someone has "won" a board.
+ * Companion object gives all the lines for a 3x3 board.
+ *
  * User: casey
  * Created: 8:52 PM 10/17/13
  */

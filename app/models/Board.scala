@@ -1,10 +1,7 @@
 package models
 
-import scala.collection.mutable
-import play.api.libs.json.{JsArray, Json}
-
 /**
- * TODO: Document me
+ * Generic class to represent an NxN board of something
  *
  * @author ckolderup
  * @since 6/20/13 9:59 AM

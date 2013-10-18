@@ -1,7 +1,8 @@
 package models
 
 /**
- * TODO: Document me
+ * A location on a board.
+ * Companion object provides all of the locations for a 3x3 board.
  *
  * @author ckolderup
  * @since 6/20/13 10:29 AM

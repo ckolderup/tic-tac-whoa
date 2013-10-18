@@ -1,8 +1,10 @@
 package models
 
 /**
- * User: casey
- * Created: 9:02 PM 10/17/13
+ * Terminal Board child class to represent a spot with a player on it
+ *
+ * @author casey
+ * @since 9:02 PM 10/17/13
  */
 class Spot extends Board[Option[Player]] {
   var here: Option[Player] = _

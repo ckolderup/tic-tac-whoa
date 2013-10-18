@@ -4,11 +4,13 @@ import java.util.UUID
 import collection.mutable
 
 /**
- * TODO: Document me
+ * Represents a single game between two players
  *
  * @author ckolderup
  * @since 6/20/13 9:57 AM
  */
+
+class NotYourTurnException extends Exception
 
 class Game(playerLabels: (String, String)) {
     val uuid: UUID = UUID.randomUUID
@@ -32,18 +34,10 @@ class Game(playerLabels: (String, String)) {
     }
 
    def play(turn: Turn, tile: Loc) {
-     //TODO: handle a player trying to play twice in a row
-     try {
-       //TODO: wtf is this
-       lastTurn.map(turn =>
-         if (board.spot(turn.worldLoc).hasWinner) throw new InvalidPlacementException
-       )
+     if (currentPlayer != turn.player) throw new NotYourTurnException
 
-       board.place(turn)
-       turns += turn
-     } catch {
-       case e: InvalidPlacementException => _
-     }
+     board.place(turn)
+     turns += turn
    }
 
   def winner: Option[Player] = board.getWinner
