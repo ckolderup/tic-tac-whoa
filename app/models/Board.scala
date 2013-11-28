@@ -9,7 +9,7 @@ package models
 class InvalidPlacementException extends Exception
 class TileCompleteException extends InvalidPlacementException
 
-trait Board[T<:Board] {
+trait Board {
   def hasWinner: Boolean = getWinner.isDefined
 
   def spot(loc: Loc) = spots(loc.x)(loc.y)
@@ -20,18 +20,17 @@ trait Board[T<:Board] {
 
   def getWinner: Option[Player] = {
     players.collectFirst { case player =>
-    Line.all.map(line => owns(player, line)) match {
-        case true => player
+      Line.all.collectFirst { case line =>
+        owns(player, line)
+      } match {
+        case Some(true) => player
+        case _ => null
       }
     }
   }
 
-  def place(turn: Turn) {
-    if (hasWinner) throw new TileCompleteException
+  def players: Set[Player] = spots.flatMap(_.flatMap(_.players)).toSet
 
-    spots(turn.tileLoc.x)(turn.tileLoc.y).place(turn)
-  }
-
-  protected val players: Set[Player]
-  protected val spots: Array[Array[T]]
+  def place(turn: Turn): Board
+  protected val spots: Array[Array[Board]]
 }

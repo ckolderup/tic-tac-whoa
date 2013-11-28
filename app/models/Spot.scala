@@ -6,11 +6,10 @@ package models
  * @author casey
  * @since 9:02 PM 10/17/13
  */
-class Spot extends Board[Option[Player]] {
-  var here: Option[Player] = _
-  val spots = None
-  val players = None
+class Spot(val player: Option[Player]) extends Board {
+  val spots = null
 
-  override def getWinner = here
-  override def place(turn: Turn) { here = Some(turn.player) }
+  override def players = player.toSet
+  override def getWinner = player
+  def place(turn: Turn): Spot = { new Spot(Some(turn.player)) }
 }

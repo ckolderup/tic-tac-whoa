@@ -15,10 +15,11 @@ class NotYourTurnException extends Exception
 class Game(playerLabels: (String, String)) {
     val uuid: UUID = UUID.randomUUID
     val players = Set(Player(playerLabels._1, "X"), Player(playerLabels._2, "O"))
-    val board: World = new World(players)
+    val board: World = new World
 
-    protected val turns: mutable.MutableList[Turn] = new mutable.MutableList()
-    def lastTurn: Option[Turn] = if (turns.isEmpty) None else Some(turns.last)
+    protected val turns: mutable.MutableList[(Turn, Board)] = new mutable.MutableList()
+
+    def lastTurn: Option[Turn] = if (turns.isEmpty) None else Some(turns.last._1)
 
     def currentPlayer: Player =
       players.diff( Set(lastTurn.map(_.player).getOrElse(players.last))).head
@@ -33,11 +34,11 @@ class Game(playerLabels: (String, String)) {
       )
     }
 
-   def play(turn: Turn, tile: Loc) {
+   def play(turn: Turn) {
      if (currentPlayer != turn.player) throw new NotYourTurnException
 
-     board.place(turn)
-     turns += turn
+     val result = board.place(turn)
+     turns += Pair(turn, result)
    }
 
   def winner: Option[Player] = board.getWinner

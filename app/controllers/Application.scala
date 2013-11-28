@@ -31,14 +31,17 @@ object Application extends Controller {
     try {
       games.get(UUID.fromString(game)) match {
         case Some(game: Game) =>
-          val player = (game.players._1.name, game.players._2.name) match {
-            case (`playerName`, _) => game.players._1
-            case (_, `playerName`) => game.players._2
+          assert(game.players.size == 2) //for now
+          val player1 = game.players.head
+          val player2 = game.players.tail.head
+          val player = (player1.name, player2.name) match {
+            case (`playerName`, _) => player1
+            case (_, `playerName`) => player2
             case _ => throw new InvalidRequestException("no such player " + playerName)
           }
 
           //TODO: handle exceptions thrown by game
-          game.play(Turn(player, Loc(boardX, boardY)), Loc(worldX, worldY))
+          game.play(Turn(player, Loc(boardX, boardY), Loc(worldX, worldY)))
           Ok(
             Json.obj(
               "msg" -> JsString("ok"),
